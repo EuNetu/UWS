@@ -1,11 +1,15 @@
 import fastifyCors from '@fastify/cors'
+import fastifyMultipart from '@fastify/multipart'
+import fastifySwagger from '@fastify/swagger'
 import fastify from 'fastify'
 import {
   hasZodFastifySchemaValidationErrors,
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { uploadImageRoute } from './routes/upload-image'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 
 const server = fastify()
 
@@ -24,6 +28,27 @@ server.setErrorHandler((error, request, reply) => {
 
 server.register(fastifyCors, {
   origin: '*',
+})
+
+server.register(fastifyMultipart)
+server.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'Upload Widget Server',
+      version: '1.0.0',
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+server.register(fastifySwaggerUi, {
+  routePrefix: '/docs',
+  // uiConfig: {
+  //   docExpansion: 'none',
+  //   deepLinking: false,
+  // },
+  // staticCSP: true,
+  // exposeRoute: true,
 })
 
 server.register(uploadImageRoute)
