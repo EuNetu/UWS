@@ -32,12 +32,13 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
       }
 
       const result = await uploadImage({
-        fileName: uploadedFile?.filename,
+        fileName: uploadedFile.filename,
         contentType: uploadedFile.mimetype,
         contentStream: uploadedFile.file,
       })
 
-      if(isRight(result)){
+      if (isRight(result)) {
+        console.log(unwrapEither(result))
         return reply.status(201).send()
       }
 
