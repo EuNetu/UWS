@@ -70,5 +70,5 @@ export async function getUploads(
       ),
   ])
 
-  return makeRight({ uploads, total: total as number })
+  return makeRight({ uploads, total: Number(total) })
 }
